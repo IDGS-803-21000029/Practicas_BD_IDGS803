@@ -1,0 +1,37 @@
+{%extends 'layout.html' %}
+
+{%block content%}
+
+    {% from "_macros.html" import render_field %}
+        <div class="cantainer">
+            <div class="row">
+
+                <h3>Alumnos</h3>
+                <h4><a href="index.html" class="btn btn-primary">Nuevo</a></h4>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apaterno</th>
+                            <th>Correo</th>
+                            <th>Eliminar</th>
+                            <th>Modificar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for alumn in alumno%}
+                        <tr>
+                            <td>{{alumn.nombre}}</td>
+                            <td>{{alumn.apaterno}}</td>
+                            <td>{{alumn.email}}</td>
+                            <td><a href="eliminar.html?id={{alumn.id}}" class="btn btn-danger">Eliminar</a></td>
+                            <td><a href="modificar.html?id={{alumn.id}}" class="btn btn-warning">Modificar</a></td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+{%endblock%}
