@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% from "_macros.html" import render_field %}
+<div class="container">
+    <div class="row">
+        <h3>Pizzería</h3>
+            <h5>Pedidos</h5>
+            <h4><a href="pedidos" class="btn btn-success">Nuevo Pedido</a></h4>
+        <!-- Ajustamos la columna del formulario para que sea responsiva -->
+        <div class="span12">
+            <div class="well">
+                <form method="GET" action="/pizzeria" class="form-horizontal">
+                    <fieldset>
+                        <legend>Filtrar Pedidos</legend>
+                        {{ render_field(form.dia, class="input-xlarge") }}
+                        {{ render_field(form.mes, class="input-xlarge") }}
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                            <button type="button" class="btn" onclick="window.location.href='/pizzeria'">Limpiar</button>
+                        </div>
+                    </fieldset>
+                </form>
+                <hr>
+                <div class="row">
+                    <div class="span11">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Envío</th>
+                                    <th>Teléfono</th>
+                                    <th>Fecha Pedido</th>
+                                    <th>Total</th>
+                                    <th>Modificar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ped in pedidos %}
+                                    {% if not fecha_filtro or ped.fechaCompra == fecha_obj %}
+                                        {% if not mes_filtro or (ped.fechaCompra.year == mes_obj.year and ped.fechaCompra.month == mes_obj.month) %}
+                                        <tr>
+                                            <td>{{ ped.nombreCliente }}</td>
+                                            <td>{{ ped.direccionEnvio }}</td>
+                                            <td>{{ ped.telefono }}</td>
+                                            <td>{{ ped.fechaCompra }}</td>
+                                            <td>{{ ped.totalCompra }}</td>
+                                            <td><a href="pedidos?id={{ ped.id_pedido }}" class="btn btn-warning">Detalle</a></td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
