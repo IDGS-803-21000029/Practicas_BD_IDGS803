@@ -92,19 +92,78 @@ def pizzeria():
     filtro_form = FiltroForm(request.form)
     fecha_filtro = request.args.get('dia')
     mes_filtro : str = request.args.get('mes')
-    print(fecha_filtro, mes_filtro)
-    print(type(fecha_filtro), type(mes_filtro))
+    ventas = 0.0
+    filtro = ''
 
     if fecha_filtro:
-        fecha_obj = datetime.strptime(fecha_filtro, '%Y-%m-%d')
-        pedidos = encabPedido.query.filter(encabPedido.fechaCompra == fecha_obj).all()
+        pedidoTodos = encabPedido.query.all()
+        pedidos = list()
+        for pedido in pedidoTodos:
+            dia_semana = pedido.fechaCompra.weekday()
+
+            if int(dia_semana) == int(fecha_filtro):
+                print(dia_semana)
+                pedidos.append(pedido)
+                ventas += pedido.totalCompra
+            
+        if fecha_filtro == '0':
+            dia = 'Lunes'
+        elif fecha_filtro == '1':
+            dia = 'Martes'
+        elif fecha_filtro == '2':
+            dia = 'Miercoles'
+        elif fecha_filtro == '3':
+            dia = 'Jueves'
+        elif fecha_filtro == '4':
+            dia = 'Viernes'
+        elif fecha_filtro == '5':
+            dia = 'Sabado'
+        elif fecha_filtro == '6':
+            dia = 'Domingo'
+
+        filtro = 'Dia: ' + dia
+
     elif mes_filtro and mes_filtro != '00':
+        ventas = 0.0
         mes_obj = datetime.strptime(mes_filtro, '%m')
         pedidos = encabPedido.query.filter(extract('month', encabPedido.fechaCompra) == mes_obj.month).all()
+
+        if mes_filtro == '01':
+            mes = 'Enero'
+        elif mes_filtro == '02':
+            mes = 'Febrero'  
+        elif mes_filtro == '03':
+            mes = 'Marzo'
+        elif mes_filtro == '04':
+            mes = 'Abril'
+        elif mes_filtro == '05':
+            mes = 'Mayo'
+        elif mes_filtro == '06':
+            mes = 'Junio'
+        elif mes_filtro == '07':
+            mes = 'Julio'
+        elif mes_filtro == '08':
+            mes = 'Agosto'
+        elif mes_filtro == '09':
+            mes = 'Septiembre'
+        elif mes_filtro == '10':
+            mes = 'Octubre'
+        elif mes_filtro == '11':
+            mes = 'Noviembre'
+        elif mes_filtro == '12':
+            mes = 'Diciembre'
+
+        filtro = 'Mes: ' + mes
+        for pedido in pedidos:
+            ventas += pedido.totalCompra
     else:
         pedidos = encabPedido.query.all()
+        filtro = 'del Dia de Hoy'
+        for pedido in pedidos:
+            if pedido.fechaCompra == datetime.now().date():
+                ventas += pedido.totalCompra
 
-    return render_template("pizzeria.html", pedidos=pedidos, form=filtro_form)
+    return render_template("pizzeria.html", pedidos=pedidos, form=filtro_form, ventas=ventas, filtro=filtro)
 
 
 @app.route("/pedidos", methods=["GET", "POST"])
@@ -124,6 +183,7 @@ def pedidos():
         encabezado = encabPedido(
             nombreCliente = ped_form.nombreCliente.data,
             direccionEnvio = ped_form.direccionEnvio.data,
+            fechaCompra = ped_form.fechaPedido.data,
             telefono = ped_form.telefono.data,
             totalCompra = ped_form.total.data
         )

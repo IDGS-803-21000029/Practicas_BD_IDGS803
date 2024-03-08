@@ -13,6 +13,30 @@ document.addEventListener('DOMContentLoaded', function () {
     loadPizzas();
 });
 
+document.getElementById('registro').addEventListener('submit', function(e) {
+    e.preventDefault(); // Evita el envío del formulario
+    
+    Swal.fire({
+        title: '¿Estás seguro de registrar el pedido?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Registrar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                'Registrado',
+                'El pedido ha sido registrado',
+                'success'
+            )
+            // Si el usuario confirma, enviar el formulario
+            document.getElementById('registro').submit();
+            
+        }
+    });
+});
+
 function addPizza() {
     const tamanio = document.querySelector('input[name="tamanioPizza"]:checked').value;
     console.log(tamanio);
@@ -27,11 +51,11 @@ function addPizza() {
     ingredientes = [];
 
     if (tamanio == 'Chica') {
-        subtotal += 10;
+        subtotal += 40;
     } else if (tamanio == 'Mediana') {
-        subtotal += 15;
+        subtotal += 80;
     } else if (tamanio == 'Grande') {
-        subtotal += 20;
+        subtotal += 120;
     }
 
     if (pina) {
@@ -53,6 +77,8 @@ function addPizza() {
         ingredientes.push('Salchicha');
         subtotal += 10;
     }
+
+    subtotal = subtotal * numPizzas;
 
     pizza = {
         tamanio: tamanio,

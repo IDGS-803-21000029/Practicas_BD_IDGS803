@@ -18,16 +18,16 @@ class PedidoForm(Form):
     direccionEnvio = StringField('Direccion', [validators.DataRequired(message='El campo es requerido'), validators.Length(min=4, max=250)])
     telefono = StringField('Telefono', [validators.DataRequired(message='El campo es requerido'), validators.NumberRange(min=2, max=20)])
     fechaPedido = DateField('FechaPedido', [validators.DataRequired(message='El campo es requerido')])
-    tamanioPizza = RadioField('Tamanio', choices=[('Chica', 'Chica $10'), ('Mediana', 'Mediana $15'), ('Grande', 'Grande $20')])
+    tamanioPizza = RadioField('Tamanio', choices=[('Chica', 'Chica $40'), ('Mediana', 'Mediana $80'), ('Grande', 'Grande $120')])
     #Ingredientes
     jamon = BooleanField('Jamon $10')
     pina = BooleanField('Piña $10')
     champin = BooleanField('Champiñones $10')
     salchicha = BooleanField('Salchicha $10')
-    numPizzas = IntegerField('Pizzas', [validators.DataRequired(message='El campo es requerido'), validators.NumberRange(min=2, max=10)])
+    numPizzas = IntegerField('Pizzas', [validators.DataRequired(message='El campo es requerido'), validators.NumberRange(min=1, max=10)])
     total = DecimalField('Total', [validators.DataRequired(message='El campo es requerido'), validators.NumberRange(min=0, max=1000000)])
     pizzas = StringField('Pizzas Array', [validators.DataRequired(message='El campo es requerido')])
 
 class FiltroForm(Form):
-    dia = DateField('Fecha')
+    dia = SelectField('Dia', choices=[('', 'Seleccione un Dia'), ('0', 'Lunes'), ('1', 'Martes'), ('2', 'Miercoles'), ('3', 'Jueves'), ('4', 'Viernes'), ('5', 'Sabado'), ('6', 'Domingo')])
     mes = SelectField('Mes', choices=[('00', 'Seleccione un Mes'), ('01', 'Enero'), ('02', 'Febrero'), ('03', 'Marzo'), ('04', 'Abril'), ('05', 'Mayo'), ('06', 'Junio'), ('07', 'Julio'), ('08', 'Agosto'), ('09', 'Septiembre'), ('10', 'Octubre'), ('11', 'Noviembre'), ('12', 'Diciembre')])
